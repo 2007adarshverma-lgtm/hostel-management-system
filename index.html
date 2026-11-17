@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HostelEase — a simple hostel management dashboard for residents, rooms, fees and complaints.">
+  <title>HostelEase | Hostel Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="#"><span class="brand-icon">H</span><span>Hostel<span class="brand-muted">Ease</span></span></a>
+    <div class="nav-caption">MAIN MENU</div>
+    <nav>
+      <a class="nav-link active" href="#overview"><span>▦</span> Overview</a>
+      <a class="nav-link" href="#residents"><span>♙</span> Residents</a>
+      <a class="nav-link" href="#rooms"><span>▣</span> Room allocation</a>
+      <a class="nav-link" href="#fees"><span>₹</span> Fee tracking</a>
+      <a class="nav-link" href="#complaints"><span>☷</span> Complaints</a>
+    </nav>
+    <div class="sidebar-tip"><span class="spark">✦</span><b>Hostel operations, simplified</b><p>Keep resident details, room occupancy and daily requests organized in one place.</p></div>
+    <div class="user-card"><div class="user-avatar">WA</div><div><b>Warden Admin</b><small>Hostel administrator</small></div><span class="dots">•••</span></div>
+  </aside>
+
+  <main class="main" id="overview">
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+      <div class="crumb">Workspace <span>/</span> <b>Overview</b></div>
+      <div class="top-right"><span class="online-dot"></span> Demo workspace <div class="mini-avatar">WA</div></div>
+    </header>
+
+    <section class="welcome">
+      <div><p class="kicker">HOSTEL ADMINISTRATION</p><h1>Good evening, Warden</h1><p class="muted">Here’s what’s happening in your hostel today.</p></div>
+      <button class="btn primary" id="addResidentTop">＋ Add resident</button>
+    </section>
+
+    <section class="stats">
+      <article class="stat"><div class="stat-label">Total residents <span class="stat-icon violet">♙</span></div><div class="stat-number" id="totalResidents">0</div><small>Registered residents</small></article>
+      <article class="stat"><div class="stat-label">Occupied rooms <span class="stat-icon blue">▣</span></div><div class="stat-number" id="occupiedRooms">0 <em>/ 40</em></div><small id="occupancyText">0% occupancy rate</small></article>
+      <article class="stat"><div class="stat-label">Pending fees <span class="stat-icon amber">₹</span></div><div class="stat-number" id="pendingFees">₹0</div><small>Outstanding resident balance</small></article>
+      <article class="stat"><div class="stat-label">Open complaints <span class="stat-icon rose">☷</span></div><div class="stat-number" id="openComplaints">0</div><small>Awaiting resolution</small></article>
+    </section>
+
+    <section class="grid-two">
+      <article class="panel" id="rooms">
+        <div class="panel-head"><div><p class="kicker">ROOM MANAGEMENT</p><h2>Room occupancy</h2><p class="muted">Current allocation across hostel rooms.</p></div><span class="pill">40 total rooms</span></div>
+        <div class="occupancy-summary"><div><strong id="roomOccupancyPercent">0%</strong><span>overall occupancy</span></div><div class="legend"><span><i class="occupied-dot"></i>Occupied</span><span><i class="vacant-dot"></i>Vacant</span></div></div>
+        <div class="big-progress"><span id="occupancyBar"></span></div>
+        <div class="room-types">
+          <div><span class="room-symbol violet-bg">2B</span><div><b>Double sharing</b><small>2 beds per room</small></div><strong id="doubleCount">0</strong></div>
+          <div><span class="room-symbol blue-bg">3B</span><div><b>Triple sharing</b><small>3 beds per room</small></div><strong id="tripleCount">0</strong></div>
+          <div><span class="room-symbol amber-bg">4B</span><div><b>Four sharing</b><small>4 beds per room</small></div><strong id="fourCount">0</strong></div>
+        </div>
+      </article>
+
+      <article class="panel" id="fees">
+        <div class="panel-head"><div><p class="kicker">FEE COLLECTION</p><h2>Payment overview</h2><p class="muted">Fee status for registered residents.</p></div><span class="pill green-pill">Live summary</span></div>
+        <div class="fee-total"><span>Total collected</span><strong id="collectedFees">₹0</strong></div>
+        <div class="fee-total"><span>Pending amount</span><strong class="pending-text" id="pendingAmount">₹0</strong></div>
+        <div class="fee-breakdown"><div><span>Paid</span><b id="paidCount">0</b></div><div><span>Pending</span><b id="pendingCount">0</b></div></div>
+        <p class="fee-note">Fee figures are based on the sample monthly fee entered for each resident.</p>
+      </article>
+    </section>
+
+    <section class="panel table-panel" id="residents">
+      <div class="panel-head"><div><p class="kicker">RESIDENT DIRECTORY</p><h2>Residents</h2><p class="muted">Add, search, edit or remove resident records.</p></div><button class="btn primary" id="addResident">＋ Add resident</button></div>
+      <div class="toolbar">
+        <label class="search"><span>⌕</span><input id="search" type="search" placeholder="Search name, roll number or room..." aria-label="Search residents"></label>
+        <select id="filterFee" aria-label="Filter by fee status"><option value="all">All fee statuses</option><option value="Paid">Paid</option><option value="Pending">Pending</option></select>
+        <button class="btn secondary" id="exportCsv">↓ Export CSV</button>
+      </div>
+      <div class="table-scroll"><table><thead><tr><th>RESIDENT</th><th>ROLL / ID</th><th>ROOM</th><th>SHARING</th><th>MONTHLY FEE</th><th>FEE STATUS</th><th>ACTIONS</th></tr></thead><tbody id="residentRows"></tbody></table></div>
+      <div class="empty" id="emptyState" hidden><div>♙</div><b>No residents found</b><p>Try changing your search or add a resident record.</p><button class="btn primary" id="emptyAdd">＋ Add resident</button></div>
+      <div class="table-foot"><span id="showingCount">Showing 0 residents</span><span>Saved locally in this browser</span></div>
+    </section>
+
+    <section class="grid-two lower">
+      <article class="panel" id="complaints">
+        <div class="panel-head"><div><p class="kicker">MAINTENANCE DESK</p><h2>Recent complaints</h2><p class="muted">Track issues reported by residents.</p></div><button class="btn secondary small" id="addComplaint">＋ Add issue</button></div>
+        <div id="complaintList" class="complaint-list"></div>
+      </article>
+      <article class="panel activity-panel">
+        <p class="kicker">QUICK ACTIONS</p><h2>Manage your hostel</h2><p class="muted">Common tasks are just one click away.</p>
+        <button class="quick-action" id="quickResident"><span class="quick-icon violet">＋</span><span><b>Register a resident</b><small>Add a new student to the hostel</small></span><i>→</i></button>
+        <button class="quick-action" id="quickComplaint"><span class="quick-icon amber">☷</span><span><b>Log a complaint</b><small>Record a maintenance request</small></span><i>→</i></button>
+        <button class="quick-action" id="quickExport"><span class="quick-icon blue">↓</span><span><b>Download resident list</b><small>Export records as a CSV file</small></span><i>→</i></button>
+      </article>
+    </section>
+    <footer>HostelEase <span>•</span> Hostel Management System <small>Built with HTML, CSS & JavaScript</small></footer>
+  </main>
+</div>
+
+<div class="backdrop" id="residentBackdrop" hidden>
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="residentModalTitle">
+    <div class="modal-head"><div><p class="kicker">RESIDENT INFORMATION</p><h2 id="residentModalTitle">Add resident</h2></div><button class="close" data-close="residentBackdrop" aria-label="Close">×</button></div>
+    <form id="residentForm">
+      <input type="hidden" id="residentId">
+      <div class="form-grid">
+        <label>Full name<input id="residentName" required maxlength="60" placeholder="e.g. Aarav Sharma"></label>
+        <label>Roll number / ID<input id="residentRoll" required maxlength="24" placeholder="e.g. CSE-024"></label>
+        <label>Room number<input id="residentRoom" required maxlength="10" placeholder="e.g. A-204"></label>
+        <label>Sharing type<select id="residentSharing"><option>Double</option><option>Triple</option><option>Four</option></select></label>
+        <label>Monthly fee (₹)<input id="residentFee" type="number" min="0" max="1000000" required value="5000"></label>
+        <label>Fee status<select id="residentStatus"><option>Paid</option><option>Pending</option></select></label>
+        <label class="full">Email (optional)<input id="residentEmail" type="email" maxlength="80" placeholder="student@example.com"></label>
+      </div>
+      <p class="error" id="residentError" role="alert"></p>
+      <div class="modal-actions"><button type="button" class="btn secondary" data-close="residentBackdrop">Cancel</button><button class="btn primary" type="submit">Save resident</button></div>
+    </form>
+  </section>
+</div>
+
+<div class="backdrop" id="complaintBackdrop" hidden>
+  <section class="modal compact-modal" role="dialog" aria-modal="true" aria-labelledby="complaintModalTitle">
+    <div class="modal-head"><div><p class="kicker">MAINTENANCE DESK</p><h2 id="complaintModalTitle">Log a complaint</h2></div><button class="close" data-close="complaintBackdrop" aria-label="Close">×</button></div>
+    <form id="complaintForm">
+      <div class="form-grid one-col">
+        <label>Resident name<input id="complaintResident" required maxlength="60" placeholder="Resident's name"></label>
+        <label>Room number<input id="complaintRoom" required maxlength="10" placeholder="e.g. B-108"></label>
+        <label>Issue category<select id="complaintCategory"><option>Electrical</option><option>Plumbing</option><option>Cleaning</option><option>Internet</option><option>Other</option></select></label>
+        <label>Issue description<textarea id="complaintDescription" required maxlength="180" rows="3" placeholder="Describe the issue briefly..."></textarea></label>
+      </div>
+      <p class="error" id="complaintError" role="alert"></p>
+      <div class="modal-actions"><button type="button" class="btn secondary" data-close="complaintBackdrop">Cancel</button><button class="btn primary" type="submit">Submit complaint</button></div>
+    </form>
+  </section>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="script.js"></script>
+</body>
+</html>
